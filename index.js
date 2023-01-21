@@ -15,10 +15,29 @@
         + It should return a string with `name` and `age`. Example: "Mary, 50"
 */
 
-function Person() {
-
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+  this.stomach = [];
+}
+Person.prototype.eat = function (edible){
+  if(this.stomach.length < 10){
+    this.stomach.push(edible);
+  }
+}
+Person.prototype.poop = function(){
+  this.stomach = [];
+}
+Person.prototype.toString = function(){
+  return `${this.name}, ${this.age}`;
 }
 
+// const taylor = new Person('Taylor', 24);
+// console.log(taylor.toString());
+// taylor.eat('tacos');
+// console.log(taylor.stomach);
+// taylor.poop();
+// console.log(taylor.stomach);
 
 /*
   TASK 2
@@ -36,10 +55,32 @@ function Person() {
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
 
-function Car() {
-
+function Car(model, milesPerGallon) {
+  this.model = model;
+  this.milesPerGallon = milesPerGallon;
+  this.tank = 0;
+  this.odometer = 0;
+}
+Car.prototype.fill = function(gallons){
+  this.tank = this.tank + gallons;
+}
+Car.prototype.drive = function(distance){
+  const driveableMiles = this.tank * this.milesPerGallon;
+  if(distance <= driveableMiles){
+    this.odometer = this.odometer + distance;
+    this.tank = this.tank - (distance / this.milesPerGallon);
+  }else{
+    this.odometer = this.odometer + driveableMiles;
+    this.tank = 0;
+    return `I ran out of fuel at ${this.odometer} miles`;
+  }
 }
 
+// const toyota = new Car('Corolla', 20);
+// toyota.fill(10);
+// toyota.drive(210);
+// console.log(toyota);
+// console.log(toyota.drive(210))
 
 /*
   TASK 3
@@ -49,18 +90,22 @@ function Car() {
         + Should return a string "Playing with x", x being the favorite toy.
 */
 
-function Baby() {
-
+function Baby(name, age, favoriteToy) {
+  Person.call(this, name, age);
+  this.favoriteToy = favoriteToy;
 }
-
+Baby.prototype = Object.create(Person.prototype);
+Baby.prototype.play = function(){
+  return `Playing with ${this.favoriteToy}`;
+}
 
 /* 
   TASK 4
   In your own words explain the four principles for the "this" keyword below:
-  1. 
-  2. 
-  3. 
-  4. 
+  1. Window/Global binding: If 'this' is used outside of any function or class, it is refering to the window the code exists in.
+  2. Implict binding: The 'this' keyword refers to the object that is stated before the '.' and function that is being called.
+  3. New binding: When using constructor functions, we use the 'new' keyword to create a new object. The 'this' keyword is referring to the new object that is created from the constructor function.
+  4. Explicit binding: We call the existing functions using methods .call, .apply, or .bind to set the value of 'this' to any value you want.
 */
 
 ///////// END OF CHALLENGE /////////
